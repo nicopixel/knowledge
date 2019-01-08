@@ -48,7 +48,7 @@ ___
 ### Otros
 
 - [guía de markdown](https://daringfireball.net/)
-- [Markdown Cheatsheet] (https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#html)
+- [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#html)
 
 ## GIT
 - `git commit -m "initial import"` "initial import" típico 1er mensaje para el primer commit
@@ -93,11 +93,6 @@ Los números de las versiones se indican con la sintaxis de `1.2.3`
 
 No hay una regla definida para definir qué cambio pertenece a cada categoría, más bien es **sentido común**
 
-**Modo Fork**
-**Útil para trabajar proyectos open-source**
-
-Forkear es hacer una copia de un repo dentro de mi propio espacio de Github. Una vez 'forkeado' se trabaja en los cambios del código. 
-
 ### Pull Request (PR)
 
 Pull request es un método para comparar, comentar y trabajar en el código antes de hacer un merge. Se puede comentar en github de manera global y en cada línea.
@@ -106,7 +101,7 @@ Una vez aprobada la rama del compañero podemos hacer el Merge Pull Request.
 
 Los pasos que llevaremos a cabo para trabajar con un proyecto donde **NO** somos colaboradores son los siguientes:
 
-1. Forkeamos el proyecto original => En github
+1. Forkeamos el proyecto original (Forkear es hacer una copia de un repo dentro de mi propio espacio de Github. Una vez 'forkeado' se trabaja en los cambios del código. ) => En github
 2. Hacer un clone de mi repositorio forkeado => `git clone <url-del-proyecto>`
 3. Se hacen los trabajos en local creando una rama => `git branch feature/branch-name` (también en este paso lógicamente hacemos un add y un commit)
 4. Hacemos push a mi repositorio forkeado pero de la rama que hemos creado. Como esta rama es nueva y queremos subirla a REMOTO y que además esté sincronizada con mi repositorio en local recordar hacer la 1ª vez => `git push --set-upstream origin feature/branch-name` en caso de que la rama exista en remoto tan sólo bastaría con un `git push`
