@@ -20,6 +20,14 @@
 - `history` ver el historial de comandos que has realizado
 - `find . -name file2` buscar un fichero o carpeta
 - `find . -type` 
+
+### `grep` command. One of the most useful commands on Linux 
+- `grep 'word' filename` search any line that contains the word in filename on Linux
+- `grep -i 'bar' file1` a case-insensitive search for the word ‘bar’ in Linux and Unix
+- `grep -R 'foo'` search all files in the current directory and in all of its subdirectories in Linux for the word ‘foo’
+- `grep -c 'nixcraft' frontpage.md` search and display the total number of times that the string ‘nixcraft’ appears in a file named frontpage.md
+- `grep -r "192.168.1.5" /etc/` search recursively i.e. read all files under each directory for a string “192.168.1.5”
+
 ___
 ### editor nano
 
@@ -49,9 +57,9 @@ Todos los proyectos deben tener README.md. .md es formato markdown
 - Crear un archivo README.MD para cada proyecto
 
 ## GIT
-- `git commit -m "initial import"` "initial import" típico 1er mensaje para GIT
-- `git show <id del log>` para ver los cambios que se han guardado
-- `git checkout index.html` recuperar archivo index.html
+- `git commit -m "initial import"` "initial import" típico 1er mensaje para el primer commit
+- `git show <id del log>` para ver los cambios que se han guardado en un ID en específico
+- `git checkout index.html` recuperar archivo index.html por ejemplo por si se ha borrado
 - `git diff` ver los cambios en específico
 - Remember: los commits solo comitean lo que esté en staging (git add .)
 - `git reset --hard HEAD` recupera el último commit de la rama donde estoy trabajando. Otra forma de hacerlo con un fichero concreto `git rm --cached index.html`
@@ -65,7 +73,49 @@ Todos los proyectos deben tener README.md. .md es formato markdown
 - merge hace un auto commit internamente
 - `git push -u origin master` subir rama master al remoto por defecto (origin)
 - `git push -u origin develop` subir rama develop al remoto por defecto (origin)
-- `git push --set-upstream origin develop`
+- `git push --set-upstream origin develop` se hace una única vez para cada rama. Es para tener las ramas sincronizadas entre remoto y local. También podemos indicar el nombre de la rama en remoto, en nuestro caso en develop
+- `git pull` integrar el estado actual de remote en local. Por ejemplo, si tenemos cambios que queremos subir pero que pueden sobrescribir el código en remoto debemos hacer primero un GIT pull
+- `git branch -d feature/login` borrar rama en LOCAL llamada feature/login
+- `git branch -D feature/background-pink` borrar rama en REMOTO llamada feature/background-pink
+- `git checkout -b feature/cian` crear rama y cambiarse a ella
+- `git push origin --delete feature/body-border` borrar la rama feature/body-border de REMOTO
+- `git add .` esto sube todos los archivos en el directorio antual pero no es buena idea ya que puede subir archivos de otroas personas. Lo recomendado es subir los archivos uno a uno
+- `git clone https://github.com/nicopixel/skylab-bootcamp-201901` clonar repositorio. Cuidado porque se clonan todas las ramas del repo de remoto. Cuando hacemos un `git branch` en local NO vemos todas las ramas pero igualmente se puede cambiar a la rama aunque no la veamos
+
+**La rama MASTER no se toca**
+
+**Tagear versiones**
+Antes de entregar al cliente hay que tagear `git tag v1.0.0` y subir a remoto los tags por medio de `git push --tags` en este caso no se generan commits en remoto, se generan únicamente los tags.
+
+Los tags se utilizan para indicar las versiones:
+
+Los números de las versiones se indican con la sintaxis de `1.2.3`
+- `1` - indica cambios mayores que implican comportamiento profundo de la aplicación
+- `2` - cambios menores
+- `3` - cambios ligeros
+
+**Modo Folk**
+**Útil para trabajar proyectos open sources**
+
+Forkear es hacer una copia de un repo dentro de mi propio espacio de Github. Una vez 'forkeado' se trabaja en los cambios del código. Pasos:
+
+1. Forkeamos el proyecto original
+2. Hacer un clone de mi repositorio forkeado
+3. Se hacen los trabajos en local creando una rama 
+4. Hacemos push a mi repositorio forkeado (`git push --set-upstream origin feature/fix-readme`)
+5. En REMOTO aplicamos Pull-request contra el proyecto original
+
+No hay una regla definida para definir qué cambio pertenece a cada categoría
+
+### Pull Request (PR)
+
+Pull request es un método para comparar dos ramas diferentes de diferentes usuarios y ver si hay conflictos antes de realizar un merge. 
+
+Es un buen método para comparar, comentar y trabajar en el código. Se puede comentar en github de manera global y en cada línea.
+
+Una vez aprobada la rama del compañero podemos hacer el Merge Pull Request.
+
+No olvidar que tenemos que subir la rama de feature/nombre-rama a remoto. No vale con hacer git push, la primera vez que subimos la rama a remoto, tenemos que hacer un `git push --set-upstream origin feature/body-border`
 
 ### Git Flow
 
