@@ -643,13 +643,6 @@ Font rules will normally affect base, module and state styles. Font styles won�
 
 -  **Adaptive Web Design** where responsive design relies on changing the design pattern to fit the real estate available to it, adaptive design has multiple fixed layout sizes. This kind of design use media-queries and breaking points
 
-
-## Enlaces
-
--  [guía de markdown](https://daringfireball.net/)
-
--  [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#html)
-
 # JS
 ##BOM
 
@@ -772,7 +765,11 @@ for (const prop in obj) {
 // "obj.c = 3"
 ```
 
-Ver concepto de higher order function. For each
+## Enlaces
+
+-  [guía de markdown](https://daringfireball.net/)
+
+-  [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#html)
 
 
 
