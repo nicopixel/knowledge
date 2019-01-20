@@ -63,9 +63,8 @@
   
 ### Otros 
 
--  **sass**: `sass --watch style.sass:style.css` enlazar archivo style.scss a style.css
+-  **sass**: `sass --watch style.sass:style.css` enlazar archivo style.scss a style.css. Por ejemplo, si queremos hacer una escucha de un directorio entero de sass y volcarlo todo hacia un archivo en la ruta `static/css` el comando que debemos utilizar, situados en la raíz del proyecto: `sass --watch assets/sass/:static/css`
 - **nano**: `ctrl + x` salir
-
 - **nano**: `ctrl + o` guardar + ENTER
 
 ___
@@ -148,7 +147,9 @@ Si ejecutamos `chmod 664 file3`:
 
 -  `git fetch upstream` bajar los cambios del upstream a local
 
--  `git merge upstream/develop` traer la rama develop de upstream a nuestra rama develop de local
+-  `git merge upstream/develop` mergear la rama bajada con develop
+
+- `git clean -f -d` discard untracked files from the actual branch
 
 -  **La rama MASTER no se toca**
 
@@ -268,6 +269,12 @@ Para ver si una etiqueta en específico es soportada por el navegador podemos us
 
 -  `alt + <flechas de movimiento>` mover líneas o bloques de texto hacia arriba o hacia abajo
 
+- `cmd + click` nos lleva a la declaración de la función y con `ctrl -` nos lleva al punto anterior (llamada de la función)
+
+- `fn + click` 
+
+
+
   
  
 ## Specificity CSS
@@ -308,333 +315,112 @@ flex: <integer>;
 
 ```
 
-# smacss
+# SASS
 
-- keep CSS more organized and more structured
-- SMACSS (pronounced “smacks”) is more style guide than rigid framework
+### SASS - Media queries
 
-There are five types of categories:
-1.  Base
-2.  Layout
-3.  Module
-4.  State
-5.  Theme
+- media queries in sass in `_mixins.sass` (usando mixins):
 
-- Much of the purpose of categorizing things is to codify patterns
+```sass
+// Medium devices
+@mixin md
+	@media (min-width: #{$screen-md-min})
+		@content
 
-### Base rules
-Are the defaults. They are almost exclusively single element selectors but it could include attribute selectors, pseudo-class selectors, child selectors or sibling selectors:
+// Large devices
+@mixin lg
+	@media (min-width: #{$screen-lg-min})
+		@content
 
-````css
-/* Example of Base Rules */
-html, body, form { margin: 0; padding: 0; } 
-input[type=text] { border: 1px solid #999; } 
-a { color: #039; } 
-a:hover { color: #03C; }
-````
-
-I highly recommended that you specify a body background. Some users may define their own background as something other than white. If you work off the expectation that the background will be white, your design may look broken. Worse, your font colour choice may clash with the user’s setting and make your site unusable.
-
-**A CSS Reset is a set of Base styles**
-
-### Layout rules  
-
-Divide the page into sections. **Layouts hold one or more modules together**
-
-The minor components (**modules**)—such as a callout, or login form, or a navigation item—sit within the scope of major components  (go inside) such as a header or footer.
-
-Layout styles can also be divided into major and minor styles based on reuse. Major layout styles such as header and footer are traditionally styled using ID selectors but **take the time to think about the elements that are common across all components of the page and use class selectors** where appropriate.
-
-````css
-#header, #article, #footer { width: 960px; margin: auto; }
-#article { border: solid #CCC; border-width: 1px 0 0; }
-````
-
-There is minor Layout styles will use class names instead of IDs so that the styles can be used multiple times on the page.
-
-Generally, a Layout style only has a single selector: a single ID or class name. However, there are times when a Layout needs to respond to different factors. For example, you may have different layouts based on user preference. This layout preference would still be declared as a Layout style and used in combination with other Layout styles.
-
-````css
-/* the .l-flipped class is applied on a higher level element such as the body element and allows the article and sidebar content to be swapped */
-#article { float: left; } 
-#sidebar { float: right; } 
-.l-flipped #article { float: right; } 
-.l-flipped #sidebar { float: left; }
-````
-
-
-Layout styles are the only primary category type to use ID selectors, **if you choose to use them at all**
-
-
-
-CSS, by its very nature, is used to lay elements out on the page. However, there is a distinction between layouts dictating the major and minor components of a page. The minor components—such as a callout, or login form, or a navigation item—sit within the scope of major components such as a header or footer. I refer to the minor components as Modules and will dive into those in the next section. The major components are referred to as Layout styles.
-
-Layout styles can also be divided into major and minor styles based on reuse. Major layout styles such as header and footer are traditionally styled using ID selectors but take the time to think about the elements that are common across all components of the page and use class selectors where appropriate.
-
-Layout declarations
-
-```
-#header, #article, #footer {
-    width: 960px;
-    margin: auto;
-}
-
-#article {
-    border: solid #CCC;
-    border-width: 1px 0 0;
-}
-
+// Extra large devices
+@mixin xl
+	@media (min-width: #{$screen-xl-min})
+		@content
 ```
 
-Some sites may have a need for a more generalized layout framework (for example,  [960.gs](http://960.gs/)). These minor Layout styles will use class names instead of IDs so that the styles can be used multiple times on the page.
+Cuando queremos usar esta media query debemos hacer:
 
-Generally, a Layout style only has a single selector: a single ID or class name. However, there are times when a Layout needs to respond to different factors. For example, you may have different layouts based on user preference. This layout preference would still be declared as a Layout style and used in combination with other Layout styles.
-
-Use of a higher level Layout style affecting other Layout styles.
-
-```
-#article {
-    float: left;
-}
-
-#sidebar {
-    float: right;
-}
-
-.l-flipped #article {
-    float: right;
-}
-
-.l-flipped #sidebar {
-    float: left;
-}
-
+```sass
+#header
+	padding: 1rem
+	@include flex(flex,  space-between,  center)
+	@include lg
+		justify-content: flex-start
+	&  .header__burger
+		@include text(24,  28,  $color: #888888,  $family: "Font Awesome 5 Free",  $weight: 600)
+		border: 1px  solid  #dddddd
+		padding: 0.5rem  1rem
+		border-radius: 0.4rem
+		@include lg
+			display: none
 ```
 
-In the Layout example, the .l-flipped class is applied on a higher level element such as the body element and allows the article and sidebar content to be swapped, moving the sidebar from the right to the left and vice versa for the article.
+- La variable **lg** la tenemos definida en `_variables.sass` :
 
-Using two Layout styles together to switch from fluid to fixed layout.
-
+```sass
+// MEDIA QUERIES
+$screen-md-min: 580px
+$screen-lg-min: 900px
+$screen-xl-min: 1400px
 ```
-#article {
-    width: 80%;
-    float: left;
-}
 
-#sidebar {
-    width: 20%;
-    float: right;
-}
+### SASS - funciones - devuelven un valor
+Ejemplo:
 
-.l-fixed #article {
-    width: 600px;
-}
+```sass
+@function em($px,  $base: $base__font-size)
+	@return ($px  /  $base) *  1em
+```
+Función para convertir pixeles a em. Ver uso abajo en mixins
 
-.l-fixed #sidebar {
-    width: 200px;
-}
 
+### SASS - mixins
+
+```sass
+=text($size,  $line,  $weight: $base__weight, $family: $text__family-sans,  $color: $text__color--base)
+	font-size: +em($size)
+	line-height: ($line/$size)
+	font-family: $family
+	color: $color
+	margin-bottom: +em($margin,  $size)
+	font-weight: $weight
+```
+
+```sass
+=flex($display: flex,  $justify-content: flex-start,  $align-items: flex-start,  $flex-flow: row  nowrap,  $align-content: flex-start)
+	display: $display
+	justify-content: $justify-content
+	align-items: $align-items
+	flex-flow: $flex-flow
+	align-content: $align-content
 ```
 
 
-
-In this last example, the  `.l-fixed`  class modifies the design to change the layout from fluid (using percentages) to fixed (using pixels).
-
-One other thing to note in the Layout example is the naming convention that I have used. The declarations that use ID selectors are named accurately and with no particular namespacing. The class-based selectors, however,  _do_  use an  `l-`  prefix. This helps easily identify the purpose of these styles and separate them from Modules or States. Layout styles are the only primary category type to use ID selectors, if you choose to use them at all. If you wish to namespace your ID selectors, you can, but it is not as necessary to do so.
-
-#### Using ID selectors
-
-To be clear, using ID attributes in your HTML can be a good thing and in some cases, absolutely necessary. For example, they provide efficient hooks for JavaScript. For CSS, however, ID selectors aren’t necessary as the performance difference between ID and class selectors is nearly non-existent and can make styling more complicated due to increasing specificity.
-
-![](https://smacss.com/img/lyt-cnn1.png)
-
-Another part of this website:
-
-![](https://smacss.com/img/lyt-cnn-ft0.png)
-
-```html
-<div> 
-	<h2>Featured</h2> 
-	<ul> 
-		<li><a href="…">…</a></li> <li><a href="…">…</a></li> 
-		… 
-	</ul> 
-</div>
-```
-A possible approach to styling the list of featured items. (without considering the SMACSS)
-
-
-```css
-div#featured ul { 
-	margin: 0; 
-	padding: 0; 
-	list-style-type: none; 
-} 
-div#featured li { 
-	float: left; 
-	height: 100px; 
-	margin-left: 10px; 
-}
-```
-
-Looking back at the code example, there are definitely some optimizations that could be made. The ID selector didn’t need to be qualified with a tag selector, too, and since the list is a direct descendant of the `div`, the child selector (>) could’ve been used.
-
-From a layout perspective, all we care about is how each item relates to each other.
-
-```css
-.l-grid { 
-	margin: 0; 
-	padding: 0; 
-	list-style-type: none; 
-} 
-.l-grid > li { 
-	display: inline-block; 
-	margin: 0 0 10px 10px; 
-}
-```
-
-**Very rarely does _any_ solution solve 100% of the problem.**
-
-### Modules Rules
-
-**Modules**  are the reusable, modular parts of our design. They are the callouts, the sidebar sections, the product lists and so on. This is the meat of the page.  Each Module should be designed to exist as a standalone component. Modules can easily be moved to different parts of the layout without breaking. Modules can sometimes sit within other Modules.
-
-Using `.module span` is great if a span will predictably be used and styled the same way every time while within that module.
-
-```html
-<div class="fld"> 
-	<span>Folder Name</span> 
-</div> 
-
-/* The Folder Module */ 
-.fld > span { 
-	padding-left: 20px; 
-	background: url(icon.png); 
-}
-```
-
-
-What happen if we do this:
-
-```html
-	<div class="fld"> 
-		<span>Folder Name</span> 
-		<span>(32 items)</span> 
-	</div>
-```
-
-As briefly mentioned in the previous section, a Module is a more discrete component of the page. It is your navigation bars and your carousels and your dialogs and your widgets and so on. This is the meat of the page. Modules sit inside Layout components. Modules can sometimes sit within other Modules, too. Each Module should be designed to exist as a standalone component. In doing so, the page will be more flexible. If done right, Modules can easily be moved to different parts of the layout without breaking.
-
-When defining the rule set for a module, avoid using IDs and element selectors, sticking only to class names. A module will likely contain a number of elements and there is likely to be a desire to use descendent or child selectors to target those elements.
-
-Module example
-
-```css
-.module > h2 {
-    padding: 5px;
-}
-
-.module span {
-    padding: 5px;
-}
-```
-
-** Avoid element selectors **
-
-Use child or descendant selectors with element selectors if the element selectors will and can be predictable. Using  `.module span`  is great if a span will predictably be used and styled the same way every time while within that module.
-
-Styling with generic element
-
-```html
-<div class="fld">
-    <span>Folder Name</span>
-</div>
-
-/* The Folder Module */
-.fld > span {
-    padding-left: 20px;
-    background: url(icon.png);
-}
-
-```
-
-The problem is that as a project grows in complexity, the more likely that you will need to expand a component’s functionality and the more limited you will be in having used such a generic element within your rule.
-
-Styling with generic element
-
-```html
-<div class="fld">
-    <span>Folder Name</span> 
-    <span>(32 items)</span>
-</div>
-
-```
-
-Now we are in a pickle. We don’t want the icon to appear on both elements within our folder module. Which leads me to my next point:
-
-**_Only include a selector that includes semantics._  A span or div holds none**. A heading has some.
-
-```html
-<div class="fld"> 
-	<span class="fld-name">Folder Name</span> 
-	<span class="fld-items">(32 items)</span> 
-</div>
-```
-By adding the classes to the elements, we have increased the semantics of what those elements mean and removed any ambiguity when it comes to styling them.
-
-If you do wish to use an element selector, it should be within one level of a class selector. In other words, you should be in a situation to use child selectors.
-
-The need for a new positioning context, for example, is likely to happen at either the layout level or at the root of a module.
-
-
-## States Rules
-
-For example, an accordion section may be in a collapsed or expanded state. A message may be in a success or error state.
-
-States are generally applied to the same element as a layout rule or applied to the same element as a base module class.
-
-
-```html
-<div id="header" class="is-collapsed"> 
-	<form> 
-		<div class="msg is-error"> There is an error! </div> 
-		<label for="searchbox" class="is-hidden">Search</label> 
-		<input type="search" id="searchbox"> 
-	</form> 
-</div>
-```
-`is-collapsed` y `is-error` son reglas de estado
-
-### Theme rules
-A theme defines colours and images that give your application or site its look and feel.
-
-Themes can affect any of the primary types. It could override base styles like default link colours. It could change module elements such as chrome colours and borders. It could affect layout with different arrangements. It could also alter how states look.
-
-### Typography
-
-Font rules will normally affect base, module and state styles. Font styles won’t normally be specified at the layout level as layouts are intended for positioning and placement, not for stylistic changes like fonts and colours.
-
-
-### BEM
+ 
+# BEM
 
 ![](https://cdn-images-1.medium.com/max/1600/1*tBFD64u6_kmPVFNxjau17A.png)
   
-
 ```html
-<div class="bloque">
-		<ul class="bloque__list">
-			<li class="bloque__list-item">
-				<a class="bloque__list-item-link" href="#">Home</a>
+<!-- HEADER -->
+<header id="header">
+	<h3 class="header__logo">Gamma</h3>
+	<i class="header__burger fas fa-bars"></i>
+	<nav class="header__nav">
+		<ul class="header__nav__menu">
+			<li class="header__nav__menu__item">
+				<a class="header__nav__menu__item__link" href="#">Home</a>
 			</li>
-			<li class="bloque__list-item">
-				<a class="bloque__list-item-link" href="#">Home</a>
-			 </li>
-			<li class="bloque__list-item--end">
-				<a class="bloque__list-item-link" href="#">Home</a>	
+			<li class="header__nav__menu__item">
+				<a class="header__nav__menu__item__link" href="#">About</a>
 			</li>
-	</ul>
-</div>
-````
+			<li class="header__nav__menu__item">
+				<a class="header__nav__menu__item__link" href="#">Contact</a>
+			</li>
+		</ul>
+	</nav>
+</header>
+```
 
 
 ### Diferencias entre responsive design y adaptive web design
@@ -642,6 +428,8 @@ Font rules will normally affect base, module and state styles. Font styles won�
 -  **Responsive designs** respond to changes in browser width by adjusting the placement of design elements to fit in the available space.
 
 -  **Adaptive Web Design** where responsive design relies on changing the design pattern to fit the real estate available to it, adaptive design has multiple fixed layout sizes. This kind of design use media-queries and breaking points
+
+
 
 # JS
 ##BOM
@@ -709,8 +497,6 @@ if (document.all)
 
 ```
 
-
-
 ```js
 var a = 3
 delete a // false
@@ -722,7 +508,7 @@ var o = {n:1}
 delete o.n //{}
 ```
 
-el typeof se usará bastante como en estos casos:
+el typeof se usará bastante como en estos casos (el typeof se usa en primitivos)
 
 ```js
 1 + '2' // lo convierte a string y devuelve 2
@@ -734,7 +520,7 @@ for (; count--;) console.log(count) // imprime de 9 a 0
 ```
 
 ### instanceOf
-Ver instanceOf, se utiliza para objetos
+Ver instanceOf, **se utiliza para objetos**
 
 ```js
 function Car(make, model, year) {
@@ -751,6 +537,55 @@ console.log(auto instanceof Object);
 // expected output: true
 ```
 
+### Use  `instanceof`  for custom types:
+
+```js
+var ClassFirst = function () {};
+var ClassSecond = function () {};
+var instance = new ClassFirst();
+typeof instance; // object
+typeof instance == 'ClassFirst'; // false
+instance instanceof Object; // true
+instance instanceof ClassFirst; // true
+instance instanceof ClassSecond; // false 
+```
+
+
+### Also, use  `instanceof`  for complex built in types:
+
+```js
+/regularexpression/ instanceof RegExp; // true
+typeof /regularexpression/; // object
+
+[] instanceof Array; // true
+typeof []; //object
+
+{} instanceof Object; // true
+typeof {}; // object
+```
+
+### Use  `typeof`  for simple built in types:
+
+```js
+'example string' instanceof String; // false
+typeof 'example string' == 'string'; // true
+
+'example string' instanceof Object; // false
+typeof 'example string' == 'object'; // false
+
+true instanceof Boolean; // false
+typeof true == 'boolean'; // true
+
+99.99 instanceof Number; // false
+typeof 99.99 == 'number'; // true
+
+function() {} instanceof Function; // true
+typeof function() {} == 'function'; // true
+```
+
+
+
+El bucle `for ...in...` recorre tanto propiedades como métodos
 
 ```js
 var obj = {a: 1, b: 2, c: 3};
@@ -763,20 +598,350 @@ for (const prop in obj) {
 // "obj.a = 1"
 // "obj.b = 2"
 // "obj.c = 3"
+``` 
+
+
+- Se debe realizar la documentación basada en http://usejsdoc.org/
+
+# Error handling
+## throw
+
+The **`throw`  statement** throws a user-defined exception. Execution of the current function will stop (the statements after `throw` won't be executed), and control will be passed to the first [`catch`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch) block in the call stack. If no `catch` block exists among caller functions, the program will terminate.
+
+```js
+function getRectArea(width, height) {
+  if (isNaN(width) || isNaN(height)) {
+    throw "Parameter is not a number!";
+  }
+}
+
+try {
+  getRectArea(3, 'A');
+}
+catch(e) {
+  console.log(e);
+  // expected output: "Parameter is not a number!"
+}
 ```
 
-## Enlaces
-
--  [guía de markdown](https://daringfireball.net/)
-
--  [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#html)
+You can specify an object when you throw an exception. You can then reference the object's properties in the `catch` block. The following example creates an object of type `UserException` and uses it in a `throw` statement.
 
 
+```js
+function UserException(message) {
+   this.message = message;
+   this.name = 'UserException';
+}
+function getMonthName(mo) {
+   mo = mo - 1; // Adjust month number for array index (1 = Jan, 12 = Dec)
+   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+   if (months[mo] !== undefined) {
+      return months[mo];
+   } else {
+      throw new UserException('InvalidMonthNo');
+   }
+}
 
- > BOM leer esto por encima: https://developer.mozilla.org/es/docs/Web/API/Window
- > DOM leer por encima: https://developer.mozilla.org/es/docs/Acerca_del_Modelo_de_Objetos_del_Documento
- > https://developer.mozilla.org/en-US/docs/Web/Events
- > https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern
- > css dinner
- 
+try {
+   // statements to try
+   var myMonth = 15; // 15 is out of bound to raise the exception
+   var monthName = getMonthName(myMonth);
+} catch (e) {
+   monthName = 'unknown';
+   console.log(e.message, e.name); // pass exception object to err handler
+}
+```
+
+You can use `throw` to rethrow an exception after you catch it. The following example catches an exception with a numeric value and rethrows it if the value is over 50. The rethrown exception propagates up to the enclosing function or to the top level so that the user sees it.
+
+```js
+try {
+   throw n; // throws an exception with a numeric value
+} catch (e) {
+   if (e <= 50) {
+      // statements to handle exceptions 1-50
+   } else {
+      // cannot handle this exception, so rethrow
+      throw e;
+   }
+}
+```
+
+
+## try catch
+
+The **`try...catch`** statement marks a block of statements to try, and specifies a response, should an exception be thrown.
+
+```js
+try {
+  _try_statements_
+}
+[catch (_exception_var_1_ if _condition_1_) { // non-standard
+  _catch_statements_1_
+}]
+...
+[catch (_exception_var_2_) {
+  _catch_statements_2_
+}]
+[finally {
+  _finally_statements_
+}]
+```
+
+The `try` statement consists of a `try` block, which contains one or more statements. `{}` must always be used, even for single statements.
+
+At least one `catch` clause, or a `finally` clause, must be present. This gives us three forms for the `try` statement:
+
+The `finally` clause executes after the `try` block and `catch` clause(s) execute but before the statements following the `try` statement. It always executes, regardless of whether an exception was thrown or caught.
+
+**Hay que hacer un TypeError** cuando por ejemplo esperamos un objeto y nos envían un array. Se puede especificar que el error es de tipo TypeError.
+
+### console.assert()
+Writes an error message to the console if the assertion is false. If the assertion is true, nothing happens.
+
+No depender de assert, es mejor utilizar un throw.
+
+### compare 2 Arrays
+array
+
+
+### Closures
+
+```js
+var  times  =  function(n){
+	return  function(x){
+		return  x  *  n;
+	}
+}
+var  times2  =  times(2);
+console.log(times2(4));
+```
+
+ver ejemplos de Closures y practicar.
+
+
+Otro ejemplo:
+
+```js
+function salute(name){
+	return function(salutation){
+		return salutation + ' ' + name + '!';
+	}
+}
+var salute2 = salute('Sergio');
+salute2('shut up'); //'shut up Sergio'
+```
+
+```js
+function productMachine(products){
+	return {
+		
+	}
+}
+
+var salute2 = salute('Sergio');
+salute2('shut up'); //'shut up Sergio'
+
+```
+
+### IIFE
+
+An **IIFE** (Immediately Invoked Function Expression) is a design pattern which is also known as a Self-Executing Anonymous Function
+
+### call() & apply()
+El call() y el apply() son dos métodos que se utilizan para llamar a funciones. Son métodos de funciones.
+
+El call() se debe llamar con parámetros mientras que apply los argumentos se deben pasar en un array.
+
+```js
+function assign(name, surname){
+	this.name = name;
+	this.surname = surname;
+}
+
+var person = {};
+assign.call(person, 'nico', 'martin');
+
+assign.apply(person, ['nico', 'martin']);
+
+person2 //{name: 'nico', surname: 'martin'}
+```
+
+El this es el contexto. 
+
+# JavaScript Prototypes
+
+## Effects of creating a function
+
+1. A function is also an object and thus it can have additional properties.
+2. A second object will be created and become attached to the function as  `<Function>.prototype`.
+
+```js
+function Person(name) {  
+  this.name = name;  
+}
+typeof Person.prototype; // "object"
+```
+
+When we invoke the `Person` function with the `new` keyword, i.e. as a constructor, a new object `this` is implicitly created, `this.name` is set, and finally, `this` is implicitly returned.
+
+```js
+function Person(name) {  
+  this.name = name;  
+}
+
+const alex = new Person("Alex");  
+typeof alex; // "object"  
+alex.name; // "Alex"
+```
+
+The object `alex` and any other object constructed from `Person`will gain indirect access to `Person.prototype`.
+
+```js
+Object.getPrototypeOf(alex) === Person.prototype; // true
+```
+
+If JavaScript cannot find the desired property on `alex`, it will check `Person.prototpe`. In other words, `alex`’s prototype chain starts with `Person.prototype`.
+
+```js
+ Object.getPrototypeOf(Person.prototype)  === Object.prototype; // true
+```
+
+#### Important
+
+1.  `alex`  was constructed from  `Person`.  
+    The prototype of  `alex`  is  `Person.prototype`.
+2.  `Person.prototype`  was constructed from  `Object`.  
+    The prototype of  `Person.prototype`  is  `Object.prototype`.
+
+this es exactly equal to:
+
+1.  `Person.prototype`  was constructed from  `Object`.  
+    The prototype of  `Person.prototype`  is  `Object.prototype`.
+2.  `Object.prototype`  was constructed from  `Object`.  
+
+`alex`’s prototype chain contains `Person.prototype` followed by `Object.prototype`.
+
+
+**End of the chain: => null**
+
+```js
+Object.getPrototypeOf(Object.prototype) === null; // true 
+```
+
+This property also applies to plain objects created from the built-in `Object` constructor and the object literal syntax.
+
+```js
+const constructedObject = new Object();  
+const objectLiteral = {};
+Object.getPrototypeOf(constructedObject) ===  Object.prototype; // true  
+Object.getPrototypeOf(objectLiteral) === Object.prototype; // true
+```
+
+The fact that nearly all objects have `Object.prototype` at the end of their prototype chains is of practical significance because they will have access to common utilities offered by `Object.prototype` such as `toString` and `valueOf`.
+
+## A function’s prototype
+
+Remember the Person Function:
+
+```js
+function Person(name) {  
+  this.name = name;  
+}
+```
+
+We think that `alex.name` is not just any random name that happens to be accessible at `alex.name`, but instead refers to **Alex’s name**.  What about `Person.prototype`? Does it refer to `Person`**’s prototype**? 
+
+**¡AND THE ANSWER IS NO!**
+
+```js
+Object.getPrototypeOf(Person) !== Person.prototype; // true
+```
+So what is the actual prototype of `Person`? It is `Function.prototype`. This is because `Person` is a `Function` and thus it has a prototype of `Function.prototype`.
+
+```js
+Object.getPrototypeOf(Person) === Function.prototype; // true
+```
+
+`Function.prototype` offers common utilities like `call`, `bind` and `apply`which can be accessed from `Person` and other functions.
+
+
+### Prototypes without constructors
+
+```js
+const greeter = {  
+  greet() {  
+    console.log(`Hi ${this.name}`);  
+  }  
+};
+
+const bob = Object.create(greeter);  
+bob.name = "Bob";  
+bob.greet(); // "Hi Bob"
+
+Object.getPrototypeOf(bob) === greeter; // true
+```
+
+`Object.create` created a new object with `greeter` as its prototype.
+
+
+
+
+### Métodos estáticos
+
+Existen métodos que no están en el prototype sino que son propiedades de la clase ( por ejemplo, Array.from() ) Son métodos estáticos ya que no necesitan crear un objeto o una instancia para utilizarlos. 
+
+No forman parte de la instancia sino del propio tipo o también se dice que son utilitarios del propio tipo. 
+
+Cuando necesitemos operar de forma estática debemos crear un método como propiedad de clase.
+
+
+
+# AJAX
+
+```js
+var form = document.getElementsByTagName('form')[0];
+var input = document.getElementsByTagName('input')[0];
+var list = document.getElementsByTagName('ul')[0];
+
+form.addEventListener('submit', function (event) {
+	event.preventDefault();
+	var query = input.value;
+	search(query);
+});
+
+function search(query) {
+	var xhr = new XMLHttpRequest;
+	xhr.open('GET', 'https://duckling-api.herokuapp.com/api/search?q=' + query);
+	
+	xhr.onload = function () {
+		var res = JSON.parse(xhr.responseText);
+		list.innerHTML = '';
+		if (res.error)
+			listNoResults(res.error);
+		else
+			listResults(res.data);
+	};
+	xhr.send();
+}
+
+function listNoResults(message) {
+	var item = document.createElement('li');
+	item.innerText = message;
+	list.appendChild(item);
+}
+
+function listResults(ducklings) {
+	ducklings.forEach(function (duckling) {
+		var item = document.createElement('li');
+		item.innerText = duckling.title;
+		var image = document.createElement('img');
+		image.src = duckling.imageUrl;
+		image.style.width = '100px';
+		item.appendChild(image);
+		list.appendChild(item);
+	});
+}
+```
 
