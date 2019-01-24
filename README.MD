@@ -1,6 +1,3 @@
-
-<hr>
-
 # console commands
 
 
@@ -44,9 +41,7 @@
 
 -  `mkdir -p /folder1/folder2/folder3` crear varios directorios al mismo tiempo con la misma instrucción. Si folder1, folder2 y folder3 no existen se pueden crear al mismo tiempo
 
-  
-
-## `grep` command. One of the most useful commands on Linux
+### `grep` command. One of the most useful commands on Linux
 
 -  `grep -r . -e github` busca en el directorio actual (.) y sus subdirectorios (-r) cualquier archivo que contenga la palabra "github"
 
@@ -60,6 +55,9 @@
 
 -  `grep -r "192.168.1.5" /etc/` search recursively i.e. read all files under each directory for a string “192.168.1.5”
 
+- `git stash` meter cajón temporal. 
+- `git stash pop` sacar del cajón temporal.
+
   
 ### Otros 
 
@@ -67,7 +65,6 @@
 - **nano**: `ctrl + x` salir
 - **nano**: `ctrl + o` guardar + ENTER
 
-___
 
 # Permisos - chmod
 
@@ -87,7 +84,6 @@ Si ejecutamos `chmod 664 file3`:
 
 -  `rw-rw-r-- 1 nico staff 25 7 ene 12:18 file3`
 
-<hr>
 
 # GIT
 
@@ -173,8 +169,13 @@ Los números de las versiones se indican con la sintaxis de `1.2.3`
 
 No hay una regla definida para definir qué cambio pertenece a cada categoría, más bien es **sentido común**
 
-  
-## Pull Request (PR)  
+ ### Git merge open VIM editor (solution)
+ 
+- Pulsar ESCAPE
+- escribir `:w` para guardar o simplemente `:wq` para guardar y salir
+
+
+### Pull Request (PR)  
 
 Pull request es un método para comparar, comentar y trabajar en el código antes de hacer un merge. Se puede comentar en github de manera global y en cada línea.
 
@@ -217,8 +218,6 @@ Cada vez que se incorpora código a master, tenemos una nueva versión. Además 
 ![Gitflow](https://datasift.github.io/gitflow/GitFlowHotfixBranch.png)
 
   
-
-<hr>
 
 # HTML5 & CSS3
 
@@ -273,14 +272,11 @@ Para ver si una etiqueta en específico es soportada por el navegador podemos us
 
 - `fn + click` 
 
-
-
-  
  
 ## Specificity CSS
 
   
-Specificity hierarchy
+**Specificity hierarchy**
 
 1. Inline styles `<h1 style=“color: #fff;”>`
 
@@ -290,7 +286,6 @@ Specificity hierarchy
 
 4. Elements and pseudo-elements (`::before`)
 
-<hr>
 
 # flex
 ```css
@@ -314,6 +309,17 @@ flex-shrink: <integer>;
 flex: <integer>; 
 
 ```
+
+# Grid
+
+
+```css
+
+grid-column-start:
+
+
+```
+
 
 # SASS
 
@@ -944,4 +950,582 @@ function listResults(ducklings) {
 	});
 }
 ```
+
+
+# Recursive Functions
+
+Utilizaremos una lamada a una función forEach en la que no podemos utilizar bucles de iteración:
+
+```js
+var  arr  = ['a', 'b', 'c', 'd', 'e'];
+forEach(arr, console.log);
+```
+
+Entonces podemos definir la función forEach de muchas formas diferentes:
+
+**Forma 1:**
+```js
+function  forEach(array, callback, count) {
+	count  =  typeof  count  ===  'undefined'  ?  0  :  count;
+	if (count  <  array.length) {
+		callback(array[count++]);
+		forEach(array, callback, count);
+	}
+}
+```
+
+**Forma 2: podemos meter el count en una propiedad de la función**
+```js
+function  forEach(array, callback) {
+	forEach.count = typeof forEach.count === 'undefined'  
+	? 0 : forEach.count;
+	if (forEach.count  <  array.length) {
+		callback(array[forEach.count++]);
+		forEach(array, callback, forEach.count);
+	} else  forEach.count  =  0;
+}
+```
+
+**Forma 3: podemos meterlo en una IIFE (Immediately Invoked Function Expressions)**
+```js
+var  forEach  = (function() {
+	var  count  =  0;
+	return  function(array, callback) {
+		if (count  <  array.length) {
+			callback(array[count++]);
+			forEach(array, callback);
+		} else  count  =  0;
+	}
+})();
+```
+**Forma 4**
+```js
+var  forEach  =  initForEach();
+
+function  initForEach() {
+	var  count  =  0;
+	return  function(array, callback) {
+		if (count  <  array.length) {
+			callback(array[count++]);
+			forEach(array, callback);
+		} else  count  =  0;
+	}
+}
+```
+
+**Forma 5 - la más limpia**
+
+```js
+function  forEach(array, callback) {
+	if (array.length) {
+		callback(array[0]);
+		forEach(array.slice(1), callback);
+	}
+}
+```
+
+# Jasmine
+
+```js
+expect(isHorroy2).toBe(false);
+expect(isHorroy2).toBeFalsy();
+expect(horr.length).toBe(1);
+expect(instance).toBe(instance);
+expect(number).toBeCloseTo(number, decimalPlaces);
+expect(mixed).toBeDefined();
+expect(mixed).toBeFalsy();
+expect(number).toBeGreaterThan(number);
+expect(number).toBeLessThan(number);
+expect(number).toBeNaN();
+expect(mixed).toBeNull();
+expect(mixed).toBeTruthy();
+expect(mixed).toBeUndefined();
+expect(array).toContain(member);
+expect(mixed).toEqual(mixed);
+expect(spy).toHaveBeenCalled();
+expect(spy).toHaveBeenCalledTimes(number);
+expect(spy).toHaveBeenCalledWith(...arguments);
+expect(mixed).toMatch(pattern);
+expect(fn).toThrow(string);
+expect(fn).toThrowError(string);
+
+```
+
+# DOM Manipulation with vanilla JS
+```js
+var  loginPanel  =  new  LoginPanel
+document.body.appendChild(loginPanel.element);
+```
+
+```js
+function  LoginPanel() {
+	Panel.call(this, document.createElement('section'));
+
+	var  container  =  this.element;
+	container.className  =  'login';
+
+	var  title  =  document.createElement('h2');
+	title.innerText  =  'Login';
+	container.appendChild(title);
+
+	var  form  =  document.createElement('form');
+	form.className  =  'login__form';
+	container.appendChild(form);
+	this.__form__  =  form;
+
+	var  emailLabel  =  document.createElement('label');
+	emailLabel.setAttribute('for', 'email');
+	emailLabel.innerText  =  'E-mail:';
+	form.appendChild(emailLabel);
+
+	var  emailInput  =  document.createElement('input');
+	emailInput.type  =  'email';
+	emailInput.name  =  'email';
+	emailInput.placeholder  =  'email';
+	emailInput.required  =  true;
+	form.appendChild(emailInput);
+	this.__emailInput__  =  emailInput;
+```
+
+
+# Bind
+
+### Example 1 bind()
+```js
+Object.defineProperty(SearchPanel.prototype, 'onSearch', {
+	set:  function (callback) {
+			this.__$form__.on('submit', function (event) {
+			event.preventDefault();
+			var  query  =  this.__$queryInput__.val();
+			callback(query);
+		}.bind(this));
+	}
+});
+```
+
+
+### Example 2 bind()
+
+```js
+Object.defineProperty(SearchPanel.prototype, 'results', {
+	set:  function (results) {
+		this.__$resultList__.empty();
+		this.__errorPanel__.hide();
+		results.forEach(function (result) {
+			var  $item  =  $('<li></li>');
+			$item.append(result.text);
+			var  $image  =  $('<img>');
+			$image.attr('src', result.image).width(100);
+			$item.append($image);
+			this.__$resultList__.append($item);
+		}.bind(this));
+	}
+});
+```
+
+# $(jQuery)
+
+### Code snippet examples using jQuery
+
+```js
+var  searchPanel  =  new  SearchPanel
+var  $body  =  $(document.body);
+$body.append(loginPanel.$element);
+```
+
+```js
+function  SearchPanel() {
+Panel.call(this, $('<section>'
+	+  '<form>'
+	+  '<input type="text" name="query" placeholder="...">'
+	+  '<button type="submit">Search</button>'
+	+  '</form>'
+	+  '<ul></ul>'
+	+  '</section>'));
+var  $container  =  this.$element;
+var  $form  =  $container.children('form'); 
+```
+
+```js
+Object.defineProperty(LoginPanel.prototype, 'onLogin', {
+	set:  function (callback) {
+		this.__$form__.on('submit', function (event) {
+			event.preventDefault();
+			var  email  =  this.__$emailInput__.val();
+			var  password  =  this.__$passwordInput__.val();
+			callback(email, password);
+		}.bind(this));
+	}
+});
+```
+
+```js
+RegisterPanel.prototype.clear  =  function () {
+	this.__$nameInput__.val('');
+	this.__$surnameInput__.val('');
+	this.__$emailInput__.val('');
+	this.__$passwordInput__.val('');
+	this.__$passwordConfirmationInput__.val('');
+	this.__errorPanel__.message  =  '';
+	this.__errorPanel__.hide();
+};
+```
+
+```js
+function  HomePanel() {
+	Panel.call(this, $('<section class="home">'
+		+  '<h2>Welcome, <span></span>!</h2>'
+		+  '<button>Logout</button>'
+	));
+	var  $container  =  this.$element;
+	this.__$userSpan__  =  $container.children('h2').children('span');
+	this.__$logoutButton__  =  $container.children('button');
+}
+```
+
+```js
+Object.defineProperty(SearchPanel.prototype, 'results', {
+	set:  function (results) {
+		this.__$resultList__.empty();
+		this.__errorPanel__.hide();
+		results.forEach(function (result) {
+			var  $item  =  $('<li></li>');
+			$item.append(result.text);
+			var  $image  =  $('<img>');
+			$image.attr('src', result.image).width(100);
+			$item.append($image);
+			this.__$resultList__.append($item);
+		}.bind(this));
+	}
+});
+```
+
+```js
+var  $inputs  =  $form.children('input');
+this.__$nameInput__  =  $($inputs[0]);
+this.__$surnameInput__  =  $($inputs[1]);
+this.__$emailInput__  =  $($inputs[2]);
+this.__$passwordInput__  =  $($inputs[3]);
+this.__$passwordConfirmationInput__  =  $($inputs[4]);
+```
+
+
+
+### Doc
+
+<table class="w3-table-all notranslate">
+<tbody><tr>
+<th style="width:23%">Mouse Events</th>
+<th style="width:25%">Keyboard Events</th>
+<th style="width:22%">Form Events</th>
+<th>Document/Window Events</th>
+</tr>
+<tr>
+<td>click</td>
+<td>keypress</td>
+<td>submit</td>
+<td>load</td>
+</tr>
+<tr>
+<td>dblclick</td>
+<td>keydown</td>
+<td>change</td>
+<td>resize</td>
+</tr>
+<tr>
+<td>mouseenter</td>
+<td>keyup</td>
+<td>focus</td>
+<td>scroll</td>
+</tr>
+<tr>
+<td>mouseleave</td>
+<td>&nbsp;</td>
+<td>blur</td>
+<td>unload</td>
+</tr>
+</tbody></table>
+
+### jQuery selectors
+
+#### Basic Selectors
+<table class="data">
+							<tbody><tr>
+								<th style="width: 100px;">Selector</th>
+								<th style="width: 150px;">Example</th>
+								<th>Description</th>
+							</tr>
+							<tr>
+								<td><code>*</code></td>
+								<td><code>$("*")</code></td>
+								<td>Selects all elements.</td>
+							</tr>
+							<tr>
+								<td><code><em>#id</em></code></td>
+								<td><code>$("#foo")</code></td>
+								<td>Selects all elements with the <code>id="foo"</code>.</td>
+							</tr>
+							<tr>
+								<td><code><em>.class</em></code></td>
+								<td><code>$(".bar")</code></td>
+								<td>Selects all elements with the <code>class="bar"</code>.</td>
+							</tr>
+							<tr>
+								<td><code><i>element</i></code></td>
+								<td><code>$("p")</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements.</td>
+							</tr>
+							<tr>
+								<td><code><i>selector1, selector2, selectorN</i></code></td>
+								<td><code>$("h1,&thinsp;p.bar,&thinsp;span")</code></td>
+								<td>Selects all <code>&lt;h1&gt;</code> and <code>&lt;span&gt;</code>, but only that <code>&lt;p&gt;</code> elements that has the <code>class="bar"</code>.</td>
+							</tr>
+						</tbody></table>
+
+
+#### Content Filter Selectors
+
+<table class="data">
+							<tbody><tr>
+								<th style="width: 100px;">Selector</th>
+								<th style="width: 150px;">Example</th>
+								<th>Description</th>
+							</tr>
+							<tr>
+								<td><code>:contains()</code></td>
+								<td><code>$('p:contains("Hello")')</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements that contains the text "Hello".</td>
+							</tr>
+							<tr>
+								<td><code>:empty</code></td>
+								<td><code>$("td:empty")</code></td>
+								<td>Selects all <code>&lt;td&gt;</code> elements that are empty i.e that have no children including text.</td>
+							</tr>
+							<tr>
+								<td><code>:has()</code></td>
+								<td><code>$("p:has(img)")</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements which contain at least one <code>&lt;img&gt;</code> element.</td>
+							</tr>
+							<tr>
+								<td><code>:parent</code></td>
+								<td><code>$(":parent")</code></td>
+								<td>Select all elements that have at least one child node either an element or text.</td>
+							</tr>
+						</tbody></table>
+
+#### Form Selectors
+<table class="data">
+							<tbody><tr>
+								<th style="width: 100px;">Selector</th>
+								<th style="width: 150px;">Example</th>
+								<th>Description</th>
+							</tr>
+							<tr>
+								<td><code>:input</code></td>
+								<td><code>$(":input")</code></td>
+								<td>Selects all input, textarea, select and button elements (basically selects all form controls).</td>
+							</tr>
+							<tr>
+								<td><code>:text</code></td>
+								<td><code>$(":text")</code></td>
+								<td>Selects all input elements with <code>type="text"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:password</code></td>
+								<td><code>$(":password")</code></td>
+								<td>Selects all input elements with <code>type="password"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:radio</code></td>
+								<td><code>$(":radio")</code></td>
+								<td>Selects all input elements with <code>type="radio"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:checkbox</code></td>
+								<td><code>$(":checkbox")</code></td>
+								<td>Selects all input elements with <code>type="checkbox"</code>.</td>
+							</tr>							
+							<tr>
+								<td><code>:button</code></td>
+								<td><code>$(":button")</code></td>
+								<td>Selects all input and button elements with <code>type="button"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:submit</code></td>
+								<td><code>$(":submit")</code></td>
+								<td>Selects all input and button elements with <code>type="submit"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:reset</code></td>
+								<td><code>$(":reset")</code></td>
+								<td>Selects all input and button elements with <code>type="reset"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:image</code></td>
+								<td><code>$(":image")</code></td>
+								<td>Selects all input elements with <code>type="image"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:file</code></td>
+								<td><code>$(":file")</code></td>
+								<td>Selects all input elements with <code>type="file"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>:enabled</code></td>
+								<td><code>$(":enabled")</code></td>
+								<td>Selects all elements that are enabled.</td>
+							</tr>
+							<tr>
+								<td><code>:disabled</code></td>
+								<td><code>$(":disabled")</code></td>
+								<td>Selects all elements that are disabled.</td>
+							</tr>
+							<tr>
+								<td><code>:selected</code></td>
+								<td><code>$(":selected")</code></td>
+								<td>Selects all elements that are selected, only works for <code>&lt;option&gt;</code> elements.</td>
+							</tr>
+							<tr>
+								<td><code>:checked</code></td>
+								<td><code>$(":checked")</code></td>
+								<td>Selects all elements that are checked or selected, works for checkboxes, radio buttons, and select elements.</td>
+							</tr>
+							<tr>
+								<td><code>:focus</code></td>
+								<td><code>$(":focus")</code></td>
+								<td>Selects element if it is currently focused.</td>
+							</tr>
+						</tbody></table>
+
+####  Attribute Selectors
+
+<table class="data">
+							<tbody><tr>
+								<th style="width: 155px;">Selector</th>
+								<th style="width: 150px;">Example</th>
+								<th>Description</th>
+							</tr>
+							<tr>
+								<td><code>[attribute]</code></td>
+								<td><code>$("[href]")</code></td>
+								<td>Selects all elements with a <code>href</code> attribute, with any value.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute="value"]</code></td>
+								<td><code>$('a[target="_blank"]')</code></td>
+								<td>Selects all <code>&lt;a&gt;</code> elements that have the <code>target</code> attribute with a value equal to <code>"_blank"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute="value"]</code></td>
+								<td><code>$('a[target!="_blank"]')</code></td>
+								<td>Selects all <code>&lt;a&gt;</code> elements that don't have the <code>target</code> attribute, or if have don't with a value <code>"_blank"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute$="value"]</code></td>
+								<td><code>$('img[src$=".png"]')</code></td>
+								<td>Selects all <code>&lt;img&gt;</code> elements that have the <code>src</code> attribute with a value ending with <code>".png"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute|="value"]</code></td>
+								<td><code>$('a[hreflang|="en"]')</code></td>
+								<td>Selects all <code>&lt;a&gt;</code> elements that have the <code>hreflang</code> attribute with a value equal to <code>"en"</code>, or starting with <code>"en"</code> followed by a hyphen,&thinsp;like <code>"en-US"</code>.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute^="value"]</code></td>
+								<td><code>$('img[title^="Smiley"]')</code></td>
+								<td>Selects all <code>&lt;img&gt;</code> elements that have the <code>title</code> attribute with a value beginning exactly with a "Smiley" string.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute~="value"]</code></td>
+								<td><code>$('img[title~="Kites"]')</code></td>
+								<td>Selects all <code>&lt;img&gt;</code> elements that have the <code>title</code> attribute with a value containing the word "Kites", delimited by spaces.</td>
+							</tr>
+							<tr>
+								<td><code>[attribute*="value"]</code></td>
+								<td><code>$('input[name*="male"]')</code></td>
+								<td>Selects all <code>&lt;input&gt;</code> elements that have the <code>name</code> attribute with&thinsp;a&thinsp;value containing the substring "male".</td>
+							</tr>
+						</tbody></table>
+
+#### Hierarchy Selectors
+
+<table class="data">
+							<tbody><tr>
+								<th style="width: 155px;">Selector</th>
+								<th style="width: 115px;">Example</th>
+								<th>Description</th>
+							</tr>
+							<tr>
+								<td><code>parent &gt; child</code></td>
+								<td><code>$("ul &gt; li")</code></td>
+								<td>Selects all <code>&lt;li&gt;</code> elements that are direct child of their parent <code>&lt;ul&gt;</code> element.</td>
+							</tr>
+							<tr>
+								<td><code>ancestor&nbsp;descendant</code></td>
+								<td><code>$("form label")</code></td>
+								<td>Selects all <code>&lt;label&gt;</code> elements that are descendant of their ancestor <code>&lt;form&gt;</code> element.</td>
+							</tr>
+							<tr>
+								<td><code>prev + next</code></td>
+								<td><code>$("h1 + p")</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements that are next i.e. immediately preceded to the <code>&lt;h1&gt;</code> elements.</td>
+							</tr>
+							<tr>
+								<td><code>prev ~ siblings</code></td>
+								<td><code>$("h1 ~ p")</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements that are siblings and follow after the <code>&lt;h1&gt;</code> elements.</td>
+							</tr>
+						</tbody></table>
+
+#### Visibility Filter Selectors
+
+<table class="data">
+							<tbody><tr>
+								<th style="width: 100px;">Selector</th>
+								<th style="width: 150px;">Example</th>
+								<th>Description</th>
+							</tr>
+							<tr>
+								<td><code>:hidden</code></td>
+								<td><code>$("p:hidden")</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements that are hidden.</td>
+							</tr>
+							<tr>
+								<td><code>:visible</code></td>
+								<td><code>$("p:visible")</code></td>
+								<td>Selects all <code>&lt;p&gt;</code> elements that are visible.</td>
+							</tr>
+						</tbody></table>
+
+
+###  Traversing Siblings
+
+-   `siblings()`
+-   `next()`
+-   `nextAll()`
+-   `nextUntil()`
+-   `prev()`
+-   `prevAll()`
+-   `prevUntil()`
+
+### Traversing Down 
+
+-   `children()`
+-   `find()`
+
+### Traversing Up
+
+-   `parent()`
+-   `parents()`
+-   `parentsUntil()`
+
+### Traversing -  Filtering
+
+- `first()`
+- `last()` 
+- `eq()`
+
+### Others
+`filter()` and `not()` allow you to select elements that match, or do not match, a certain criteria.
+
 
