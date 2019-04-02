@@ -1,5 +1,5 @@
 # console commands
-@sergio
+@sergio 2
 
 -  `pwd` muestra la ruta en la que nos encontramos
 
